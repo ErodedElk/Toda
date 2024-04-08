@@ -21,5 +21,5 @@ a.finish()
 - printreg：打印寄存器值。
 - printstr：打印字符串。
 - mhexdump：以16进制打印内存。
-- setreg：None
+- setreg：设置寄存器为特定值。
 - setmempory：None
