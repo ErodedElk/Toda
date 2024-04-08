@@ -17,8 +17,9 @@ a.finish()
 
 ## 相关功能
 目前只针对 x64 平台开启 pie 保护后的程序进行插桩，相关功能完善中。
-- printreg：完工
-- printstr：完工
-- hexdump：None
+- raw_shellcode：直接注入任意 shellcode。
+- printreg：打印寄存器值。
+- printstr：打印字符串。
+- mhexdump：以16进制打印内存。
 - setreg：None
 - setmempory：None
