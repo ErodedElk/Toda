@@ -9,6 +9,10 @@ def round_up(value,align):
     else:
         return value+(align-(value%align))
 
+def reg2offset(reg):
+    idx=RECOVER_REG_LIST.index(reg)
+    return 8*idx
+
 class hook_base:
     def __init__(self):
         return 
@@ -107,3 +111,11 @@ class mhexdump(hook_base):
             syscall
         """
 
+class setreg(hook_base):
+    def __init__(self,reg,value):
+        super(setreg,self).__init__()
+
+        self.template=f"""
+            mov r14,{value};
+            mov [rbp+{reg2offset(reg)+8}],r14;
+        """

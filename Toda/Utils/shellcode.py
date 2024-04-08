@@ -89,6 +89,7 @@ pop r11; pop r10; pop r9; pop r8;
 pop rbp; pop rdi; pop rsi;
 pop rdx; pop rcx; pop rbx; pop rax;
 """
+RECOVER_REG_LIST=["fq","r15","r14","r13","r12","r11","r10","r9","r8","rbp","rdi","rsi","rdx","rcx","rbx","rax"]
 
 
 TOHEX_FUNCTION=f"""

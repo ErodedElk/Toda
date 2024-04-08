@@ -137,9 +137,13 @@ class patcher:
 
         hook_sc=b""
         hook_sc+=asm(SAVE_REG)
+        hook_sc+=asm("push rbp;mov rbp,rsp;")
 
         for i in functions:
             hook_sc+=i.serialize()
+        
+        hook_sc+=asm("leave;")
+        
         hook_sc+=asm(RECOVER_REG)
         hook_sc+=self.fix_ins(backup_ins,next_addr)
         self.write_map(self.offset,hook_sc)
