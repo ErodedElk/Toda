@@ -1,6 +1,13 @@
 from Toda.Utils.shellcode import *
+
 def split_string_by_length(s, length):
     return [s[i:i+length] for i in range(0, len(s), length)]
+
+def round_up(value,align):
+    if value%align==0:
+        return value
+    else:
+        return value+(align-(value%align))
 
 class hook_base:
     def __init__(self):
@@ -12,6 +19,8 @@ class printreg(hook_base):
     def __init__(self,reg):
         super(printreg,self).__init__()
         self.template=f"""
+            push {reg};
+
             bswap {reg};
             mov [{TEMP_BUF}],{reg};
             mov rdi,{TEMP_BUF};
@@ -30,6 +39,7 @@ class printreg(hook_base):
             mov rdx,1;
             mov rax,1;
             syscall;
+            pop rax;
         """
         
 class printstr(hook_base):
@@ -65,7 +75,7 @@ class printstr(hook_base):
             mov rax,1;
             syscall
             leave;
-            
+
             mov byte ptr [{TEMP_BUF}],10;
             mov rdi,1;
             mov rsi,{TEMP_BUF};
@@ -73,5 +83,27 @@ class printstr(hook_base):
             mov rax,1;
             syscall;
 
+        """
+
+class raw_shellcode(hook_base):
+    def __init__(self,sc):
+        super(printstr,self).__init__()
+        self.template=sc
+
+class mhexdump(hook_base):
+    def __init__(self,addrorreg,length):
+        super(mhexdump,self).__init__()
+        length=round_up(length,0x10)
+        self.template=f"""
+            mov rdi,{addrorreg};
+            mov rsi,{TEMP_BUF};
+            mov rdx,{length};
+            mov r14,{TOHEX_FUNC_ADDR};
+            call r14;
+            mov rsi,{TEMP_BUF};
+            mov rdi,1;
+            mov rdx,{length};
+            mov rax,1;
+            syscall
         """
 
